@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maqway.wxht.dao.WXImgDao">
+
+  <insert id="batchInsertWXImg" parameterType="java.util.List"
+    useGeneratedKeys="true" keyProperty="imgId" keyColumn="img_id">
+    INSERT INTO
+    tb_wx_img(img_addr, priority, create_time, wx_id)
+    VALUES
+    <foreach collection="list" item="wxImg" index="index"
+      separator=",">
+      (
+      #{wxImg.imgAddr},
+      #{wxImg.priority},
+      #{wxImg.createTime},
+      #{wxImg.wxId}
+      )
+    </foreach>
+  </insert>
+<select id="queryWXImgList" parameterType="Integer" resultType="com.maqway.wxht.entity.WXImg">
+  select * from tb_wx_img WHERE wx_id=#{wxId};
+</select>
+
+  <delete id="deleteWXImgById" parameterType="int">
+    DELETE FROM tb_wx_img
+    WHERE wx_id = #{wxId}
+  </delete>
+
+</mapper>

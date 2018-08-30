@@ -1,0 +1,12 @@
+.mb{
+  margin-bottom: .30rem;
+}
+#user-img{
+ width:60px;
+  height:60px;
+  border-radius:60px
+}
+#user-name{
+  color:white;
+  font-style: normal;
+}

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="wxhtpt:war">
+    <output-path>$PROJECT_DIR$/wxhtpt/target</output-path>
+    <root id="archive" name="wxht.war">
+      <element id="artifact" artifact-name="wxhtpt:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>我的管理</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+  <link rel="shortcut icon" href="/favicon.ico"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  <meta name="format-detection" content="telephone=no"/>
+  <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css"/>
+  <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css"/>
+  <link rel="stylesheet" href="../resources/css/wxmanage/wxmanage.css"/>
+  <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+<!-- page集合的容器，里面放多个平行的.page，其他.page作为内联页面由路由控制展示 -->
+<div class="page-group">
+  <!-- 单个page ,第一个.page默认被展示-->
+  <div class="page">
+<header class="bar bar-nav">
+  <a class="icon icon-me pull-left"></a>
+  <h1 class="title">我的管理</h1>
+</header>
+<div class="content close-panel">
+  <div class="content-block">
+    <div class="row">
+      <!--<div class="col-100 mb">-->
+        <!--<a href="/wxht/wxmanage/wxlist"-->
+           <!--class="button button-big button-fill ">-->
+          <!--微信号管理-->
+        <!--</a>-->
+      <!--</div>-->
+      <div class="col-100 mb">
+        <a href="/wxht/wxmanage/wxgrouplist"
+           class="button button-big button-fill ">
+          微信组管理
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<!--侧边栏  -->
+<div class="panel-overlay"></div>
+<div class="panel panel-left panel-reveal" id="panel-left-demo">
+  <div class="content-block">
+    <p>
+      <img src="../resources/watermark.jpg" id="user-img"/>&nbsp;&nbsp;<a id="user-name">用户</a>
+    </p>
+    <p>
+      <a href="#" id="change-phone" class="close-panel"></a>
+    </p>
+    <p>
+      <a href="/wxht/local/edit?id=1" class="close-panel">修改资料</a>
+    </p>
+
+    <p>
+      <a href="/wxht/local/changepsw?id=2" class="close-panel">修改密码</a>
+    </p>
+    <p>
+      <a href="#"  class="close-panel" id="log-out">登出系统</a>
+    </p>
+    <!-- Click on link with "close-panel" class will close panel -->
+  </div>
+</div>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js'
+        charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js'
+        charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js'></script>
+<script type='text/javascript' src='../resources/js/wxmanage/commons.js'></script>
+<script type='text/javascript' src='../resources/js/local/logout.js'></script>
+<script type='text/javascript' src='../resources/js/wxmanage/wxmanage.js'></script>
+</body>
+</html>

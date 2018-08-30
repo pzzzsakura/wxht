@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maqway.wxht.dao.WXManageDao">
+  <resultMap id="wxManageResultMap" type="com.maqway.wxht.entity.WXManage">
+    <id property="wxManageId" column="wxmanage_id"></id>
+    <result property="wxManageName" column="wxmanage_name"></result>
+    <result property="wxManageDesc" column="wxmanage_desc"></result>
+    <result property="wxManageImg" column="wxmanage_img"></result>
+    <result property="priority" column="priority"></result>
+    <result property="createTime" column="create_time"></result>
+    <result property="updateTime" column="update_time"></result>
+    <result property="enableStatus" column="enable_status"></result>
+    <result property="advice" column="advice"></result>
+    <association property="wxManageCategory" column="wmcId" javaType="com.maqway.wxht.entity.WXManageCategory">
+      <id column="wmc_id" property="wmcId"></id>
+      <result column="wmc_name" property="wmcName"></result>
+    </association>
+    <association property="user" column="userId" javaType="com.maqway.wxht.entity.User">
+      <id property="userId" column="user_id"></id>
+      <result property="userName" column="user_name"></result>
+    </association>
+  </resultMap>
+  <insert id="insertWXManage" parameterType="com.maqway.wxht.entity.WXManage"
+    useGeneratedKeys="true" keyProperty="wxManageId" keyColumn="wxmanage_id">
+    INSERT  INTO tb_wxmanage
+    (wxmanage_name, wxmanage_desc, wxmanage_img, priority, create_time, update_time, enable_status, owner_id, wmc_id, advice)
+    VALUES
+    (#{wxManageName},#{wxManageDesc},#{wxManageImg},#{priority},#{createTime},#{updateTime},#{enableStatus},#{user.userId},#{wxManageCategory.wmcId},#{advice})
+  </insert>
+
+  <select id="queryWXManageList"  resultMap="wxManageResultMap">
+    SELECT
+    w.wxmanage_id,
+    w.wxmanage_name,
+    w.wxmanage_desc,
+    w.wxmanage_img,
+    w.priority,
+    w.create_time,
+    w.update_time,
+    w.enable_status,
+    w.owner_id,
+    c.wmc_id,
+    c.wmc_name,
+    u.user_id,
+    u.user_name,
+    w.advice
+    FROM tb_wxmanage w
+    LEFT JOIN tb_wxmanage_category c ON w.wmc_id = c.wmc_id
+    RIGHT JOIN tb_user u ON w.owner_id=u.user_id
+    <where>
+    <trim suffixOverrides=",">
+    <if test="wxManage!=null and wxManage.user!=null and wxManage.user.userId!=null">and w.owner_id=#{wxManage.user.userId}</if>
+    <if test="wxManage!=null and wxManage.wxManageCategory!=null and wxManage.wxManageCategory.wmcId!=null">and w.wmc_id=#{wxManage.wxManageCategory.wmcId}</if>
+    <if test="wxManage!=null and wxManage.wxManageId!=null">and w.wxmanage_id=#{wxManage.wxManageId}</if>
+      <if test="wxManage!=null and wxManage.wxManageName!=null">and w.wxmanage_name LIKE CONCAT(CONCAT('%',#{wxManage.wxManageName}),'%')</if>
+    </trim>
+    and w.enable_status=1
+    </where>
+    order by w.priority ASC
+    LIMIT #{rowIndex},#{pageSize};
+  </select>
+
+  <select id="queryCount"  resultType="int">
+    SELECT count(1)
+    FROM tb_wxmanage w
+    LEFT JOIN tb_wxmanage_category c ON w.wmc_id = c.wmc_id
+    RIGHT JOIN tb_user u ON w.owner_id=u.user_id
+    <where>
+      <trim suffixOverrides=",">
+        <if test="wxManage!=null and wxManage.user!=null and wxManage.user.userId!=null">and w.owner_id=#{wxManage.user.userId}</if>
+        <if test="wxManage!=null and wxManage.wxManageCategory!=null and wxManage.wxManageCategory.wmcId!=null">and w.wmc_id=#{wxManage.wxManageCategory.wmcId}</if>
+        <if test="wxManage!=null and wxManage.wxManageId!=null">and w.wxmanage_id=#{wxManage.wxManageId}</if>
+        <if test="wxManage!=null and wxManage.wxManageName!=null">and w.wxmanage_name LIKE CONCAT(%,CONCAT(#{wxManage.wxManageName},%))</if>
+      </trim>
+    </where>
+    and w.enable_status=1
+    order by w.priority ASC
+  </select>
+
+
+  <select id="queryWXManageById"  parameterType="Integer" resultMap="wxManageResultMap">
+    SELECT
+    w.wxmanage_id,
+    w.wxmanage_name,
+    w.wxmanage_desc,
+    w.wxmanage_img,
+    w.priority,
+    w.create_time,
+    w.update_time,
+    w.enable_status,
+    w.owner_id,
+    c.wmc_id,
+    c.wmc_name,
+    u.user_id,
+    u.user_name,
+    w.advice
+    FROM tb_wxmanage w
+    LEFT JOIN tb_wxmanage_category c ON w.wmc_id = c.wmc_id
+    RIGHT JOIN tb_user u ON w.owner_id=u.user_id
+    <where>
+        and  w.wxmanage_id=#{wxManage.wxManageId} and w.enable_status=1
+    </where>
+  </select>
+
+  <update id="updateWXMange" parameterType="com.maqway.wxht.entity.WXManage">
+    UPDATE tb_wxmanage SET
+    <trim suffixOverrides=",">
+    <if test="wxManageName!=null">wxmanage_name=#{wxManageName},</if>
+    <if test="wxManageDesc!=null">wxmanage_desc=#{wxManageDesc},</if>
+    <if test="wxManageImg!=null">wxmanage_img=#{wxManageImg},</if>
+    <if test="advice!=null">advice=#{advice}</if>
+    </trim>
+    <where>
+      and wxmanage_id=#{wxManageId}
+    </where>
+  </update>
+
+  <delete id="deleteWXMange" parameterType="Integer">
+    delete from tb_wxmanage WHERE wxmanage_id=#{wxManageId}
+  </delete>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maqway.wxht.dao.WechatUserDao">
+
+  <select id="queryWechatUserByOpenId" parameterType="String" resultType="com.maqway.wxht.entity.WechatUser">
+    select
+    wechat_name, wechat_sex, wechat_openid, wechat_address, wechat_create_time, wechat_headimg
+    from tb_wechat_user
+    WHERE wechat_openid=#{wechatOpenId};
+  </select>
+
+  <insert id="insertWechatUser" parameterType="com.maqway.wxht.entity.WechatUser">
+    INSERT INTO tb_wechat_user
+    (wechat_name, wechat_sex, wechat_openid, wechat_address, wechat_create_time, wechat_headimg)
+    VALUES
+    (#{wechatName},#{wechatSex},#{wechatOpenId},#{wechatAddress},#{wechatCreateTime},#{wechatHeadImg});
+  </insert>
+
+</mapper>

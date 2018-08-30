@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maqway.wxht.dao.WXDao">
+<resultMap id="wxResultMap" type="com.maqway.wxht.entity.WX">
+  <id column="wx_id" property="wxId"></id>
+  <result column="wx_name" property="wxName"></result>
+  <result column="wx_desc" property="wxDesc"/>
+  <result column="wx_img" property="wxImg"></result>
+  <result column="priority" property="priority"></result>
+  <result column="create_time" property="createTime"></result>
+  <result column="update_time" property="updateTime"></result>
+  <result column="enable_status" property="enableStatus"></result>
+  <association property="wxManage" column="wxmanage_id" javaType="com.maqway.wxht.entity.WXManage">
+    <id property="wxManageId" column="wxmanage_id"></id>
+    <result property="wxManageName" column="wxmanage_name"></result>
+    <result property="wxManageDesc" column="wxmanage_desc"></result>
+    <result property="wxManageImg" column="wxmanage_img"></result>
+    <result property="priority" column="priority"></result>
+    <result property="createTime" column="create_time"></result>
+    <result property="updateTime" column="update_time"></result>
+    <result property="enableStatus" column="enable_status"></result>
+    <result property="advice" column="advice"></result>
+  </association>
+  <collection property="wxImgList" column="imgId" ofType="com.maqway.wxht.entity.WXImg">
+    <id property="imgId" column="img_id"></id>
+    <result property="imgAddr" column="img_addr"></result>
+    <result property="priority" column="priority"></result>
+    <result property="createTime" column="create_time"></result>
+    <result column="wx_id" property="wxId"></result>
+  </collection>
+</resultMap>
+
+  <insert id="insertWX" parameterType="com.maqway.wxht.entity.WX"
+    useGeneratedKeys="true" keyProperty="wxId" keyColumn="wx_id">
+
+    INSERT INTO  tb_wx
+    (wx_name, wx_desc, wx_img, priority, create_time, update_time, enable_status, wxmanage_id)
+     VALUES
+     (#{wxName},#{wxDesc},#{wxImg},#{priority},#{createTime},#{updateTime},#{enableStatus},#{wxManage.wxManageId})
+  </insert>
+
+  <select id="queryWXList"  resultMap="wxResultMap">
+    select
+    w.wx_id,
+    w.enable_status,
+    w.create_time c1,
+    w.priority p1,
+    w.update_time,
+    w.wx_desc,
+    w.wx_img,
+    w.wx_name,
+    m.wxmanage_id,
+    m.wxmanage_name,
+    i.img_id,
+    i.img_addr,
+    i.create_time c2,
+    i.priority p2
+    FROM tb_wx w LEFT JOIN tb_wx_img i ON i.wx_id=w.wx_id
+    LEFT JOIN tb_wxmanage m ON  w.wxmanage_id=m.wxmanage_id
+    <where>
+      <if test="wx!=null and wx.wxManage!=null and wx.wxManage.wxManageId!=null">and m.wxmanage_id=#{wx.wxManage.wxManageId}</if>
+      <if test="wx!=null and wx.wxId!=null">and w.wx_id=#{wx.wxId}</if>
+      <if test="wx!=null and wx.wxName!=null">and w.wx_name LIKE  CONCAT('%',CONCAT(#{wx.wxName},'%'))</if>
+    </where>
+    ORDER BY i.priority ASC
+    LIMIT #{rowIndex},#{pageSize};
+  </select>
+
+  <select id="queryCount"  resultType="int">
+    select
+   count(1)
+    FROM tb_wx w
+    <where>
+      <if test="wx!=null and wx.wxManage!=null and wx.wxManage.wxManageId!=null">and wxmanage_id=#{wx.wxManage.wxManageId}</if>
+      <if test="wx!=null and wx.wxId!=null">and w.wx_id=#{wx.wxId}</if>
+      <if test="wx!=null and wx.wxName!=null">and w.wx_name LIKE  CONCAT(CONCAT('%',#{wx.wxName}),'%')</if>
+    </where>
+  </select>
+
+
+  <select id="queryWXById" parameterType="Integer" resultMap="wxResultMap">
+    select
+    w.wx_id,
+    w.enable_status,
+    w.create_time c1,
+    w.priority p1,
+    w.update_time,
+    w.wx_desc,
+    w.wx_img,
+    w.wx_name,
+    m.wxmanage_id,
+    m.wxmanage_name,
+    i.img_id,
+    i.img_addr,
+    i.create_time c2,
+    i.priority p2
+    FROM tb_wx w LEFT JOIN tb_wx_img i ON i.wx_id=w.wx_id
+    LEFT JOIN tb_wxmanage m ON  w.wxmanage_id=m.wxmanage_id
+
+    <where>
+      <if test="wxId!=null">and w.wx_id=#{wxId}</if>
+    </where>
+    ORDER  BY i.priority ASC;
+  </select>
+
+  <update id="updateWX" parameterType="com.maqway.wxht.entity.WX">
+    UPDATE tb_wx SET
+    <trim suffixOverrides=",">
+      <if test="wxName!=null">wx_name=#{wxName},</if>
+      <if test="wxDesc!=null">wx_desc=#{wxDesc},</if>
+      <if test="wxImg!=null">wx_img=#{wxImg},</if>
+    </trim>
+    <where>
+      wx_id=#{wxId}
+    </where>
+  </update>
+
+  <delete id="deleteWX" parameterType="Integer">
+    DELETE FROM tb_wx WHERE  wx_id=#{wxId}
+  </delete>
+
+</mapper>

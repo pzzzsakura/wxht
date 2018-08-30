@@ -1,0 +1,19 @@
+.row-wx{
+  border: 1px solid #3d4145;
+  padding: .5rem;
+  border-bottom: none;
+}
+.row-wx *{
+  white-space: nowrap;
+  overflow: scroll;
+}
+.row-wx:last-child{
+  border-bottom: 1px solid #5f646e;
+}
+.wx-name{
+  white-space: nowrap;
+  overflow: scroll;
+}
+.wx-wrap a{
+  margin-right: 1rem;
+}

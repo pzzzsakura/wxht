@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maqway.wxht.dao.UserDao">
+  <insert id="insertUser" parameterType="com.maqway.wxht.entity.User"
+    useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+    insert INTO
+    tb_user
+    (user_name, user_sex, user_phone,user_psw, user_img,create_time, update_time, enable_status)
+    VALUES (#{userName},#{userSex},#{userPhone},#{userPsw},#{userImg},#{createTime},#{updateTime},#{enableStatus});
+</insert>
+
+  <select id="queryUserByCondition"  resultType="com.maqway.wxht.entity.User">
+    SELECT
+    user_id,user_name, user_sex, user_phone,user_img,create_time, update_time, enable_status
+    FROM tb_user
+    <where>
+      <if test="userCondition!=null and userCondition.userId!=null">
+        and user_id=#{userCondition.userId}</if>
+      <if test="userCondition!=null and userCondition.userName!=null">
+        and user_name=#{userCondition.userName}</if>
+      <if test="userCondition!=null and userCondition.userPhone!=null">
+        and user_phone=#{userCondition.userPhone}</if>
+      <if test="userCondition!=null and userCondition.userPsw!=null">
+        and user_psw=#{userCondition.userPsw}</if>
+    </where>
+  </select>
+
+  <update id="updateUserById" parameterType="com.maqway.wxht.entity.User">
+    UPDATE tb_user SET
+    <trim suffixOverrides=",">
+    <if test="userName!=null">user_name=#{userName},</if>
+    <if test="userSex!=null">user_sex=#{userSex},</if>
+    <if test="userPsw!=null">user_psw=#{userPsw},</if>
+    <if test="userImg!=null">user_img=#{userImg},</if>
+    <if test="updateTime!=null">update_time=#{updateTime},</if>
+    <if test="enableStatus!=null">enable_status=#{enableStatus}</if>
+    </trim>
+    <where>
+      AND  user_id=#{userId}
+    </where>
+  </update>
+</mapper>
